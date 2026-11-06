@@ -1,0 +1,16 @@
+{
+    "name": "dekorasia/enterprise-wms",
+    "description": "Enterprise Warehouse & Inventory Management System PT. Dekor Asia Jayakarya",
+    "type": "project",
+    "license": "proprietary",
+    "require": {
+        "php": ">=8.2",
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*",
+        "ext-bcmath": "*",
+        "ext-mbstring": "*",
+        "ext-sodium": "*",
+        "ext-json": "*"
+    },
+    "autoload": { "psr-4": { "DekorAsia\\Wms\\": "src/" } }
+}
