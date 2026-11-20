@@ -1,4 +1,6 @@
-.env
-/vendor/
-/storage/logs/*
-!/storage/logs/.gitkeep
+config.local.php
+*.log
+*.zip
+desktop.ini
+admin/backups/
+admin/uploads/

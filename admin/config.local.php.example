@@ -1,0 +1,10 @@
+<?php
+// Salin file ini menjadi config.local.php (jangan di-commit / jangan dibagikan).
+// File ini dimuat otomatis oleh config.php dan menimpa nilai bawaan.
+$db_host = 'localhost';
+$db_user = 'root';
+$db_pass = '';
+$db_name = 'dekorwms';
+$db_port = 3306;
+// Buat kunci acak 64 karakter hex, contoh perintah: php -r "echo bin2hex(random_bytes(32));"
+define('APP_KEY', 'GANTI-DENGAN-HASIL-PERINTAH-DI-ATAS');

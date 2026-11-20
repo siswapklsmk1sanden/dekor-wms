@@ -16,7 +16,7 @@ Bahasa antarmuka: Indonesia dan Inggris (tombol ID | EN, lihat bagian 6).
 4. Salin admin\config.local.php.example menjadi admin\config.local.php, lalu isi kredensial database dan APP_KEY
    (lihat bagian 5 butir 1). File config.local.php tidak boleh dibagikan atau diunggah (berisi password dan APP_KEY).
 5. Buka http://localhost/dekorwms/admin/login.php
-   (setelah "Reload" Apache di Laragon, alamat http://localhost:8081/dekorwms/admin/login.php. juga bisa).
+   (setelah "Reload" Apache di Laragon, alamat http://dekorwms.test/admin/login.php juga bisa).
 6. Akun yang ada di dekorwms.sql: admin (Super Admin IT), kepala, ppic, gudang, finance.
    Password pada berkas ini SUDAH BUKAN 123456, jadi pakai password yang ditetapkan pemilik proyek.
    Bila lupa, buat hash baru lalu perbarui kolom password_hash tabel users lewat HeidiSQL:
