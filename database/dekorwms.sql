@@ -66,7 +66,6 @@ CREATE TABLE `bom_components` (
 --
 
 INSERT INTO `bom_components` (`id`, `bom_id`, `component_item_id`, `required_qty`, `scrap_tolerance_pct`) VALUES
-(3, 2, 1, 10.0000, 3.00),
 (5, 3, 4, 10.0000, 3.00),
 (6, 5, 4, 5.0000, 3.00);
 
@@ -89,7 +88,6 @@ CREATE TABLE `bom_headers` (
 --
 
 INSERT INTO `bom_headers` (`id`, `bom_code`, `target_item_id`, `output_batch_size`, `is_active`) VALUES
-(2, 'BOM-TEST-001', 3, 100000.0000, 0),
 (3, 'BOM-PAGAR-01', 3, 1.0000, 0),
 (5, 'BOM-PAGAR-02', 3, 1.0000, 1);
 
@@ -215,11 +213,11 @@ CREATE TABLE `items` (
 --
 
 INSERT INTO `items` (`id`, `sku`, `barcode_ean13`, `item_name`, `category_id`, `unit_id`, `default_supplier_id`, `reference_photo_path`, `specification`, `length_mm`, `width_mm`, `height_mm`, `unit_cbm`, `min_safety_stock`, `reorder_point`, `moving_avg_cost_idr`, `is_active`, `created_at`) VALUES
-(1, 'DAJ-RM-TEAK-001', '8991001001', 'Papan Kayu Jati Oven 200x20x3cm', 1, 1, 1, 'uploads/requests/r20261118_102154_d99f324c8ee4.jpg', 'per meter', 2000, 200, 30, 0.012000, 100.0000, 150.0000, 0.0000, 1, '2026-11-12 07:28:45'),
-(2, 'DAJ-CH-GLUE-001', '8991001002', 'Lem Epoxy Ekspor Grade-A', 2, 1, 2, 'uploads/requests/r20261116_140825_d76612e6ef5f.jpg', NULL, 200, 200, 300, 0.012000, 20.0000, 40.0000, 7000.0000, 1, '2026-11-12 07:28:45'),
-(3, 'DAJ-FG-FENCE-001', '8991001003', 'Pagar Bambu Hitam Gulung 180x90cm', 3, 1, NULL, 'uploads/requests/r20261118_101944_556f34fee408.jpg', NULL, 1800, 900, 100, 0.162000, 50.0000, 80.0000, 0.0000, 1, '2026-11-12 07:28:45'),
-(4, 'DAJ-RM-BAMBU-001', NULL, 'Bambu Hitam Mentah 3m', 4, 1, NULL, 'uploads/requests/r20261118_102120_4aeccc3cc083.jpg', 'Contoh: panjang 3 m, diameter sekitar 8 cm. Sesuaikan.', 3000, 80, 80, 0.019200, 100.0000, 200.0000, 30000.0000, 1, '2026-11-18 03:16:11'),
-(5, 'DAJ-PK-KAWAT-001', NULL, 'Kawat Pengikat Bambu', 5, 7, NULL, 'uploads/requests/r20261118_102032_f1a35d161858.jpg', 'Contoh. Sesuaikan jenis dan ukuran kawat.', 0, 0, 0, 0.000000, 10.0000, 20.0000, 0.0000, 1, '2026-11-18 03:16:11');
+(1, 'DAJ-RM-TEAK-001', '8991001001', 'Papan Kayu Jati Oven 200x20x3cm', 1, 1, 1, NULL, 'per meter', 2000, 200, 30, 0.012000, 100.0000, 150.0000, 0.0000, 1, '2026-11-12 07:28:45'),
+(2, 'DAJ-CH-GLUE-001', '8991001002', 'Lem Epoxy Ekspor Grade-A', 2, 1, 2, NULL, NULL, 200, 200, 300, 0.012000, 20.0000, 40.0000, 7000.0000, 1, '2026-11-12 07:28:45'),
+(3, 'DAJ-FG-FENCE-001', '8991001003', 'Pagar Bambu Hitam Gulung 180x90cm', 3, 1, NULL, NULL, NULL, 1800, 900, 100, 0.162000, 50.0000, 80.0000, 0.0000, 1, '2026-11-12 07:28:45'),
+(4, 'DAJ-RM-BAMBU-001', NULL, 'Bambu Hitam Mentah 3m', 4, 1, NULL, NULL, 'Contoh: panjang 3 m, diameter sekitar 8 cm. Sesuaikan.', 3000, 80, 80, 0.019200, 100.0000, 200.0000, 30000.0000, 1, '2026-11-18 03:16:11'),
+(5, 'DAJ-PK-KAWAT-001', NULL, 'Kawat Pengikat Bambu', 5, 7, NULL, NULL, 'Contoh. Sesuaikan jenis dan ukuran kawat.', 0, 0, 0, 0.000000, 10.0000, 20.0000, 0.0000, 1, '2026-11-18 03:16:11');
 
 -- --------------------------------------------------------
 
@@ -731,7 +729,7 @@ INSERT INTO `users` (`id`, `role_id`, `employee_nik`, `full_name`, `username`, `
 (2, 2, 'DAJ-0002', 'Staff PPIC Demo', 'ppic', 'staff.ppic@dekorasia.local', NULL, '$2y$12$W0d/KvC5vHBrgBM3H9W1G.A6sLuBw1CwdqGmtX0okiiJt5sroNPJ.', 1, 0, NULL, '2026-11-18 11:44:46', '2026-11-12 07:28:45'),
 (3, 3, 'DAJ-0003', 'Kepala Gudang Demo', 'kepala', 'kepala.gudang@dekorasia.local', NULL, '$2y$12$5G.eVbRo7zTFkPGY5JdiheLxKnaiKyaLln0AsfxAGbBOF5Wi80Cva', 1, 0, NULL, '2026-11-18 13:45:16', '2026-11-12 07:28:45'),
 (4, 4, 'DAJ-0004', 'Auditor Finance Demo', 'finance', 'auditor@dekorasia.local', NULL, '$2y$12$6/RIMyM4pS0fJ2NmVXhD5O6VUuAI5H4tC2fxhOI.C4rR3yU.m1h.m', 1, 0, NULL, '2026-11-18 11:21:05', '2026-11-12 07:28:45'),
-(5, 5, 'DAJ-0005', 'Super Admin IT', 'admin', 'admin@dekorasia.local', 'uploads/avatars/u5_bcb69deb49fc.jpg', '$2y$12$tGS5/9yQL8FvpyBlyCf39eefrhwylFfRnBGnz98jFBJZmZ7CcR.5u', 1, 0, NULL, '2026-11-18 14:00:03', '2026-11-12 07:28:45');
+(5, 5, 'DAJ-0005', 'Super Admin IT', 'admin', 'admin@dekorasia.local', NULL, '$2y$12$tGS5/9yQL8FvpyBlyCf39eefrhwylFfRnBGnz98jFBJZmZ7CcR.5u', 1, 0, NULL, '2026-11-18 14:00:03', '2026-11-12 07:28:45');
 
 -- --------------------------------------------------------
 

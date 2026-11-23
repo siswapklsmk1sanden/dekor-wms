@@ -1,7 +1,7 @@
 WMS PHP NATIVE - PT. DEKOR ASIA JAYAKARYA
 Diperbarui: 20 November 2026 (database\dekorwms.sql: 31 tabel, sudah termasuk tabel yang dulu dibuat otomatis, lihat bagian 8)
 Ringkasan: aplikasi gudang (Warehouse Management System) berbasis PHP + MySQL, dijalankan lokal lewat Laragon.
-Bahasa antarmuka: Indonesia dan Inggris (tombol ID | EN, lihat bagian 6).
+Bahasa antarmuka: Indonesia (fitur bahasa Inggris sudah dihapus, lihat bagian 6).
 
 ======================================================================
 1. PEMASANGAN (Windows + Laragon)
@@ -11,7 +11,8 @@ Bahasa antarmuka: Indonesia dan Inggris (tombol ID | EN, lihat bagian 6).
 3. Buat database: buka HeidiSQL (klik kanan ikon Laragon > MySQL > HeidiSQL) atau http://localhost/phpmyadmin,
    lalu impor database\dekorwms.sql. Database "dekorwms" terbuat otomatis.
    File ini LENGKAP dan menjadi satu-satunya sumber skema (31 tabel). Untuk instalasi baru tidak ada file migrasi
-   yang perlu dijalankan.
+   yang perlu dijalankan. Database lama (sebelum v38) dapat dinaikkan dengan menjalankan database\migration_v38.sql lalu
+   database\migration_v39.sql sekali lewat phpMyAdmin / HeidiSQL.
    PERINGATAN: mengimpor dekorwms.sql pada database yang sudah berisi data AKAN MENIMPA data tersebut.
 4. Salin admin\config.local.php.example menjadi admin\config.local.php, lalu isi kredensial database dan APP_KEY
    (lihat bagian 5 butir 1). File config.local.php tidak boleh dibagikan atau diunggah (berisi password dan APP_KEY).
@@ -105,7 +106,7 @@ SISTEM: Audit Log (rantai hash SHA-256 + verifikasi), Pengguna, Hak Akses, Backu
 
 Fitur umum: ekspor Excel .xlsx asli (kembali ke CSV bila ekstensi zip mati), cetak dokumen ber-barcode Code 128 (print_trx,
 print_labels, print_spk, print_return), notifikasi (stok minimum, lot kedaluwarsa/hampir kedaluwarsa), mode gelap/terang,
-sidebar yang bisa diciutkan, pencarian cepat di header (tombol "/"), tampilan nyaman di HP, dua bahasa (Indonesia / Inggris).
+sidebar yang bisa diciutkan, pencarian cepat di header (tombol "/"), tampilan nyaman di HP.
 
 Setelah barang masuk dan QC PASSED, stok tersedia di Saldo Stok; bila HOLD_QUARANTINE, ada di Karantina QC sampai diputuskan.
 
@@ -148,34 +149,10 @@ admin\backups\. Memulihkan wajib memasukkan password sendiri dan mengetik PULIHK
 Windows Task Scheduler (memanggil admin\backup_cli.php). Lampiran faktur ikut tercadangkan.
 
 ======================================================================
-6. MULTI BAHASA (INDONESIA / INGGRIS)
+6. BAHASA ANTARMUKA
 ======================================================================
-Tombol ID | EN tersedia di halaman login dan header. Bahasa aktif ditentukan berurutan: ?lang=xx -> sesi -> cookie wmsLang -> default
-(Indonesia). Cookie dipakai karena logout menghapus sesi.
-
-Berkas:
-  admin\lang.php          mesin terjemahan: __(), __e(), tombol ID|EN, penanganan ?lang=xx
-  admin\lang\en.php       kamus Inggris
-  admin\lang_check.php    pemeriksa kamus (command line): php admin\lang_check.php
-
-Cara pakai di kode:
-  <?= __e('Simpan') ?>                          cetak teks, sudah di-escape HTML
-  $x = __('Draft #{id} dari {nama}', ['id' => 5, 'nama' => $n]);
-  JavaScript: kirim lewat <?= wmsJs([...]) ?>   (lihat layout.php)
-Teks sumber = bahasa Indonesia apa adanya. Teks yang belum ada di kamus tampil dalam bahasa Indonesia (tidak pernah kosong/rusak).
-Bentuk jamak: nilai kamus berupa ['1 item', '{n} items'], dipilih lewat parameter 'n'.
-
-Menambah terjemahan:
-  1. Kamus berformat file PHP: return [ 'teks Indonesia' => 'English', ... ];  Kunci = teks Indonesia PERSIS seperti di kode.
-  2. Tambahkan entri ke admin\lang\en.php.
-  3. Jalankan  php admin\lang_check.php  untuk melihat teks di kode yang belum ada di kamus.
-  4. Opsional: di config.local.php tambahkan  define('WMS_LANG_DEBUG', true);  maka teks yang belum diterjemahkan dan sempat
-     ditampilkan dicatat ke admin\lang\missing.en.txt (matikan setelah selesai).
-
-Yang sengaja TIDAK diterjemahkan: isi Audit Log (disimpan di database dan memakai rantai hash) dan data (nama supplier, SKU,
-label draft, nama peran) karena itu isi database, bukan teks antarmuka.
-Yang sudah diterjemahkan: halaman login, menu, grup menu, judul halaman, header (sapaan, jam, lonceng, banner, kotak scan),
-notifikasi. Halaman manage_*.php, profile.php, index.php, dan print_*.php masih berbahasa Indonesia, kecuali judul halamannya.
+Antarmuka hanya berbahasa Indonesia. Fitur dua bahasa (lang.php, lang\en.php, lang_check.php, tombol ID | EN)
+sudah dihapus dan tidak dipakai lagi.
 
 ======================================================================
 7. MASALAH UMUM
@@ -188,7 +165,6 @@ notifikasi. Halaman manage_*.php, profile.php, index.php, dan print_*.php masih 
 - Tabel atau kolom tambahan (reservasi, hutang supplier, lampiran faktur) dibuat otomatis oleh admin\schema_ext.php saat halaman
   terkait dibuka. Pada database lama, user MySQL harus punya hak CREATE dan ALTER; bila tidak, beri hak itu sementara atau
   impor dekorwms.sql ke database baru.
-- Teks tampil dalam bahasa Indonesia padahal bahasa Inggris dipilih: teks itu belum ada di admin\lang\en.php (lihat bagian 6).
 
 ======================================================================
 8. RIWAYAT PERKEMBANGAN (RINGKAS)
@@ -223,7 +199,7 @@ Penyempurnaan terakhir
   - Backup & Pulihkan dipasang kembali (manage_backup.php, backup_helper.php, backup_cli.php, backup_otomatis.bat).
   - Pelepasan OTOMATIS reservasi yang lewat tanggal dibutuhkan + masa tenggang; PPN per baris faktur supplier; lampiran scan
     faktur (admin\uploads\invoices, invoice_file.php). Tabel dan kolom baru dibuat otomatis oleh schema_ext.php.
-  - Multi bahasa Indonesia / Inggris (lang.php, lang\en.php, lang_check.php).
+  - Fitur multi bahasa Indonesia / Inggris dihapus kembali (hanya Indonesia).
 
 ======================================================================
 9. BELUM ADA
@@ -231,4 +207,3 @@ Penyempurnaan terakhir
 - Reservasi dilepas otomatis hanya saat ada pengguna membuka halaman (tidak ada penjadwal/cron).
 - Posting Stock Opname / pembatalan yang menurunkan stok di bawah jumlah yang dipesan ditolak sampai reservasinya dilepas.
 - PPN dihitung per baris faktur yang terkait PO; faktur tanpa PO memakai satu persentase untuk seluruh nilai barang.
-- Terjemahan Inggris belum mencakup halaman manage_*.php, profile.php, index.php, dan print_*.php.
