@@ -19,6 +19,14 @@ function wmsSessionExpired($last, $now, $limit = SESSION_IDLE_LIMIT)
 }
 if (session_status() === PHP_SESSION_NONE) {
     $isHttps = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+    // Sesi khusus WMS: nama cookie sendiri (cookie "localhost" dipakai bersama semua aplikasi
+    // di port berbeda) dan folder sesi sendiri, supaya tidak dihapus/ditimpa aplikasi lain
+    // dan tidak dibersihkan PHP setelah 24 menit (gc_maxlifetime bawaan 1440 detik).
+    session_name('WMSSESSID');
+    $wmsSessDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'wms_sessions';
+    if (!is_dir($wmsSessDir)) { @mkdir($wmsSessDir, 0700, true); }
+    if (is_dir($wmsSessDir) && is_writable($wmsSessDir)) { session_save_path($wmsSessDir); }
+    ini_set('session.gc_maxlifetime', (string)SESSION_IDLE_LIMIT);
     session_set_cookie_params([
         'lifetime' => 0, 'path' => '/', 'secure' => $isHttps,
         'httponly' => true, 'samesite' => 'Lax',

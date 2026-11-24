@@ -1,16 +1,19 @@
 <?php
 /**
  * Audit Log: riwayat aktivitas + verifikasi rantai hash SHA-256.
- * Pembersihan seluruh log: semua peran yang dapat membuka halaman ini (permintaan pemilik proyek),
- * wajib mengetik HAPUS, dan satu catatan "log dibersihkan oleh ..." tetap dibuat.
- * Untuk membatasi lagi ke Super Admin: ganti $canClear di bawah dengan
- * (($_SESSION['role_code'] ?? '') === 'super_admin').
+ * Hak akses sesuai matriks RBAC: Kepala Gudang hanya melihat; Auditor/Finance dan Super Admin
+ * dapat memverifikasi rantai hash; pembersihan seluruh log hanya Super Admin, wajib mengetik
+ * HAPUS, dan satu catatan "log dibersihkan oleh ..." tetap dibuat.
+ * Untuk mengembalikan pembersihan ke semua peran yang bisa membuka halaman ini:
+ * ganti $canClear dengan !empty($_SESSION['user_id']).
  */
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/layout.php';
 requirePermission('audit', 'view');
 
-$canClear = !empty($_SESSION['user_id']);   // requirePermission di atas sudah memastikan login dan hak lihat
+$roleCode  = (string)($_SESSION['role_code'] ?? '');
+$canVerify = in_array($roleCode, ['auditor_finance', 'super_admin'], true);
+$canClear  = ($roleCode === 'super_admin');
 if (empty($_SESSION['audit_clear_token'])) {
     $_SESSION['audit_clear_token'] = bin2hex(random_bytes(16));
 }
@@ -48,7 +51,9 @@ $flash = $_SESSION['flash'] ?? null;
 unset($_SESSION['flash']);
 
 $verify = null;
-if (isset($_GET['verify'])) {
+if (isset($_GET['verify']) && !$canVerify) {
+    $verify = ['err', 'Verifikasi rantai hash hanya untuk Auditor/Finance dan Super Admin.'];
+} elseif (isset($_GET['verify'])) {
     $bad = auditVerifyChain();
     $verify = $bad === null
         ? ['ok', 'Rantai hash utuh: tidak ada log yang diubah atau dihapus.']
@@ -88,7 +93,7 @@ renderHeader('Audit Log');
     <input type="text" name="q" value="<?= e($q) ?>" placeholder="Cari aksi, modul, ID, pengguna, deskripsi" style="max-width:360px">
     <button type="submit">Cari</button>
     <?php if ($q !== ''): ?><a class="btn sec" href="manage_audit_log.php">Reset</a><?php endif; ?>
-    <a class="btn danger" style="background:#2b5d8a" href="?verify=1">Verifikasi Rantai Hash</a>
+    <?php if ($canVerify): ?><a class="btn danger" style="background:#2b5d8a" href="?verify=1">Verifikasi Rantai Hash</a><?php endif; ?>
   </form>
   <?php if ($canClear): ?>
   <form method="post" style="margin:0"

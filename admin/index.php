@@ -97,6 +97,10 @@ renderHeader('Dashboard');
   .two .panel{margin-bottom:0}
   .two .wide{grid-column:1/-1}
   @media(max-width:1000px){.two{grid-template-columns:minmax(0,1fr)}}
+  .cg{stroke:#e4e4e4}
+  .ct{fill:#5d6368}
+  html[data-theme=dark] .cg{stroke:rgba(148,163,184,.18)}
+  html[data-theme=dark] .ct{fill:#94a3b8}
   .bar{background:#eee;border-radius:6px;height:10px;overflow:hidden;min-width:120px}
   .bar i{display:block;height:100%;background:var(--pri-d)}
   .bar i.hi{background:#b3261e}
@@ -115,8 +119,8 @@ renderHeader('Dashboard');
   <strong>Tren transaksi <?= (int)$trendDays ?> hari terakhir</strong>
   <svg viewBox="0 0 <?= $cW ?> <?= $cH ?>" role="img" aria-label="Grafik batang jumlah transaksi masuk dan keluar per hari" style="width:100%;min-width:560px;height:auto;display:block;margin-top:8px">
     <?php for ($k = 0; $k <= 4; $k++): $val = $tTop / 4 * $k; $y = $cT + $cPh - $cPh * $k / 4; ?>
-      <line x1="<?= $cL ?>" x2="<?= $cW - $cR ?>" y1="<?= $nf($y) ?>" y2="<?= $nf($y) ?>" stroke="#e4e4e4" stroke-width="1"/>
-      <text x="<?= $cL - 6 ?>" y="<?= $nf($y + 3.5) ?>" text-anchor="end" font-size="10" fill="#5d6368"><?= e(rtrim(rtrim(number_format($val, 1, '.', ''), '0'), '.')) ?></text>
+      <line x1="<?= $cL ?>" x2="<?= $cW - $cR ?>" y1="<?= $nf($y) ?>" y2="<?= $nf($y) ?>" class="cg" stroke-width="1"/>
+      <text x="<?= $cL - 6 ?>" y="<?= $nf($y + 3.5) ?>" text-anchor="end" class="ct" font-size="10"><?= e(rtrim(rtrim(number_format($val, 1, '.', ''), '0'), '.')) ?></text>
     <?php endfor; ?>
     <?php $idx = 0; foreach ($trend as $d => $t):
         $x0 = $cL + $cSlot * $idx + ($cSlot - 2 * $cBw - 2) / 2;
@@ -126,7 +130,7 @@ renderHeader('Dashboard');
         <title><?= e($lbl . ' - Masuk: ' . $t['in'] . ', Keluar: ' . $t['out']) ?></title>
         <?php if ($t['in'] > 0): ?><rect x="<?= $nf($x0) ?>" y="<?= $nf($cT + $cPh - $hIn) ?>" width="<?= $nf($cBw) ?>" height="<?= $nf($hIn) ?>" rx="2" fill="var(--pri-d)"/><?php endif; ?>
         <?php if ($t['out'] > 0): ?><rect x="<?= $nf($x0 + $cBw + 2) ?>" y="<?= $nf($cT + $cPh - $hOut) ?>" width="<?= $nf($cBw) ?>" height="<?= $nf($hOut) ?>" rx="2" fill="#2b5d8a"/><?php endif; ?>
-        <text x="<?= $nf($cL + $cSlot * $idx + $cSlot / 2) ?>" y="<?= $cH - 14 ?>" text-anchor="middle" font-size="10" fill="#5d6368"><?= e($lbl) ?></text>
+        <text x="<?= $nf($cL + $cSlot * $idx + $cSlot / 2) ?>" y="<?= $cH - 14 ?>" text-anchor="middle" class="ct" font-size="10"><?= e($lbl) ?></text>
       </g>
     <?php $idx++; endforeach; ?>
   </svg>

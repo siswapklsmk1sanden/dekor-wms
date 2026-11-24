@@ -378,7 +378,9 @@ if ($pendingDrafts > 0 && (canAccess('inbound', 'create') || canAccess('outbound
     <input type="hidden" name="id" value="<?= (int)$formRow['id'] ?>">
     <div class="grid">
     <?php foreach ($fields as $f):
-        $n = $f['name']; $type = $f['type'] ?? 'text'; $val = $formRow[$n] ?? ''; ?>
+        $n = $f['name']; $type = $f['type'] ?? 'text'; $val = $formRow[$n] ?? '';
+        // Isian angka: buang nol desimal di belakang (7000.0000 -> 7000)
+        if ($type === 'number' && is_string($val) && strpos($val, '.') !== false && is_numeric($val)) $val = rtrim(rtrim($val, '0'), '.'); ?>
       <?php if ($type === 'bool'): ?>
         <div class="chk"><input type="checkbox" id="f_<?= e($n) ?>" name="<?= e($n) ?>" value="1" <?= (int)$val === 1 ? 'checked' : '' ?>>
           <label for="f_<?= e($n) ?>" style="margin:0"><?= e($f['label']) ?></label></div>
@@ -431,7 +433,9 @@ if ($pendingDrafts > 0 && (canAccess('inbound', 'create') || canAccess('outbound
         <?php foreach ($c['columns'] as $key => $label):
             $v = $r[$key] ?? '';
             if (isset($byName[$key]) && ($byName[$key]['type'] ?? '') === 'bool') $v = (int)$v === 1 ? 'Ya' : 'Tidak';
-            if (isset($byName[$key]) && !empty($byName[$key]['encrypted'])) $v = crudReveal($v); ?>
+            if (isset($byName[$key]) && !empty($byName[$key]['encrypted'])) $v = crudReveal($v);
+            // Kolom rupiah: tampil 7.000 (titik ribuan), bukan 7000.0000
+            if (!empty($c['money']) && in_array($key, $c['money'], true) && $v !== '' && is_numeric($v)) $v = number_format((float)$v, 0, ',', '.'); ?>
           <td><?= e($v) ?></td>
         <?php endforeach; ?>
         <?php if ($soft): ?>

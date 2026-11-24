@@ -346,16 +346,22 @@ renderHeader('Purchase Order');
   <form method="post" autocomplete="off" style="margin-top:12px">
     <input type="hidden" name="csrf" value="<?= e($csrf) ?>">
     <input type="hidden" name="action" value="create">
-    <div class="grid">
+    <style>
+      .grid.po-head{grid-template-columns:repeat(3,minmax(0,1fr));align-items:start}
+      .grid.po-head .span2{grid-column:span 2}
+      @media(max-width:900px){.grid.po-head{grid-template-columns:repeat(2,minmax(0,1fr))}.grid.po-head .span2{grid-column:1/-1}}
+      @media(max-width:600px){.grid.po-head{grid-template-columns:1fr}}
+    </style>
+    <div class="grid po-head">
       <div><label>Supplier *</label>
         <select name="supplier_id" id="supplier_id" required><option value="">- pilih -</option>
         <?php foreach ($suppliers as $s): ?><option value="<?= (int)$s['id'] ?>" data-lead="<?= (int)$s['lead_time_days'] ?>" <?= (string)$s['id'] === $form['supplier_id'] ? 'selected' : '' ?>><?= e($s['company_name'] . svlkLabel($s)) ?></option><?php endforeach; ?>
         </select></div>
-      <div><label>Tanggal PO *</label><input type="date" name="order_date" value="<?= e($form['order_date']) ?>" required style="width:100%;padding:8px;border:1px solid #ccc;border-radius:6px"></div>
+      <div><label>Tanggal PO *</label><input type="date" name="order_date" value="<?= e($form['order_date']) ?>" required></div>
       <div><label>No. PO</label><input type="text" name="po_number" maxlength="30" value="<?= e($form['po_number']) ?>" placeholder="kosong = dibuat otomatis"></div>
-      <div><label>Catatan untuk supplier (tercetak di surat)</label><input type="text" name="notes" maxlength="500" value="<?= e($form['notes']) ?>" placeholder="mis. kirim pagi hari, hubungi petugas gudang sebelum tiba"></div>
       <div><label>Batas kirim (opsional)</label><input type="date" name="deliver_by" id="deliverBy" min="<?= date('Y-m-d') ?>" value="<?= e($form['deliver_by']) ?>">
         <small id="leadHint" style="color:#666;display:block;margin-top:4px">Terisi otomatis dari lead time supplier; boleh diubah.</small></div>
+      <div class="span2"><label>Catatan untuk supplier (tercetak di surat)</label><input type="text" name="notes" maxlength="500" value="<?= e($form['notes']) ?>" placeholder="mis. kirim pagi hari, hubungi petugas gudang sebelum tiba"></div>
     </div>
     <div class="scroll" style="margin-top:14px">
       <table id="poLines">

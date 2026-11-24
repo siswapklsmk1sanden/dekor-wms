@@ -64,4 +64,5 @@ crudRun([
                    JOIN units u ON u.id = i.unit_id
                    ORDER BY i.sku",
     'columns' => $columns,
+    'money'   => ['moving_avg_cost_idr'],
 ]);
