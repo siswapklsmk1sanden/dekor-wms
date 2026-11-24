@@ -132,22 +132,32 @@ renderHeader('Pengguna');
 <h2>Manajemen Pengguna</h2>
 <?php if ($flash): ?><div class="<?= $flash[0] === 'ok' ? 'ok' : 'err' ?>"><?= e($flash[1]) ?></div><?php endif; ?>
 <?php foreach ($errors as $er): ?><div class="err"><?= e($er) ?></div><?php endforeach; ?>
-<div class="panel">
+<style>
+  .uform .fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px 16px}
+  .uform label{display:block;margin-bottom:6px;font-size:13px}
+  .uform input[type=text],.uform input[type=password],.uform select{
+    width:100%;box-sizing:border-box;height:40px;padding:0 12px;font:inherit;font-size:14px}
+  .uform .actions{margin-top:18px;display:flex;gap:10px;align-items:center}
+  @media (max-width:800px){.uform .fgrid{grid-template-columns:1fr}}
+</style>
+<div class="panel uform">
   <strong><?= $form['id'] ? 'Ubah pengguna' : 'Tambah pengguna' ?></strong>
-  <form method="post" autocomplete="off" style="margin-top:12px">
+  <form method="post" autocomplete="off" style="margin-top:14px">
     <input type="hidden" name="csrf" value="<?= e($csrf) ?>">
     <input type="hidden" name="id" value="<?= (int)$form['id'] ?>">
-    <div class="grid">
+    <div class="fgrid">
       <div><label>NIK karyawan *</label><input type="text" name="employee_nik" value="<?= e($form['employee_nik']) ?>" placeholder="DAJ-0006" required></div>
       <div><label>Nama lengkap *</label><input type="text" name="full_name" value="<?= e($form['full_name']) ?>" required></div>
       <div><label>Username *</label><input type="text" name="username" value="<?= e($form['username']) ?>" required></div>
       <div><label>Email *</label><input type="text" name="email" value="<?= e($form['email']) ?>" required></div>
       <div><label>Peran *</label><select name="role_id" required><option value="">- pilih -</option>
         <?php foreach ($roles as $r): ?><option value="<?= (int)$r['id'] ?>" <?= (string)$r['id'] === (string)$form['role_id'] ? 'selected' : '' ?>><?= e($r['role_name']) ?></option><?php endforeach; ?></select></div>
-      <div><label>Password <?= $form['id'] ? '(kosongkan jika tidak diganti)' : '* (min. 8 karakter)' ?></label><input type="password" name="password" autocomplete="new-password" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:6px"></div>
+      <div><label>Password <?= $form['id'] ? '(kosongkan jika tidak diganti)' : '* (min. 8 karakter)' ?></label><input type="password" name="password" autocomplete="new-password"></div>
     </div>
-    <p style="margin:14px 0 0"><button type="submit">Simpan</button>
-      <?php if ($form['id']): ?><a class="btn sec" href="manage_user.php">Batal</a><?php endif; ?></p>
+    <div class="actions">
+      <button type="submit">Simpan</button>
+      <?php if ($form['id']): ?><a class="btn sec" href="manage_user.php">Batal</a><?php endif; ?>
+    </div>
   </form>
 </div>
 <div class="panel scroll">
